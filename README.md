@@ -22,7 +22,9 @@
 14. [Kebutuhan Server](#14-kebutuhan-server)
 15. [Peran Folder](#15-peran-folder)
 16. [File Inti](#16-file-inti)
-17. [Kesimpulan](#17-kesimpulan)
+17. [Timeline Pengerjaan](#17-timeline-pengerjaan)
+18. [Anggaran](#18-anggaran)
+19. [Kesimpulan](#19-kesimpulan)
 
 ---
 
@@ -43,35 +45,40 @@ Website TBL dibangun sebagai **aset digital jangka panjang**, bukan sekadar webs
 
 ```mermaid
 flowchart LR
-    A["Homepage"] --> B["Katalog"]
-    B --> C["Detail Produk"]
-    C --> D["CTA WhatsApp"]
-    D --> E["Konsultasi"]
+    A["Homepage"]:::step
+    B["Katalog"]:::step
+    C["Detail Produk"]:::step
+    D["CTA WhatsApp"]:::step
+    E["Konsultasi"]:::end
 
-    style A fill:#e3f2fd
-    style B fill:#bbdefb
-    style C fill:#90caf9
-    style D fill:#64b5f6
-    style E fill:#42a5f5,color:#fff
+    A --> B --> C --> D --> E
+
+    classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef end fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
 ```
 
 ### Inti Alur Admin
 
 ```mermaid
 flowchart LR
-    A["Login"] --> B["Dashboard"]
-    B --> C["Kelola Produk"]
-    B --> D["Kelola Promo"]
-    B --> E["Kelola Konten"]
-    B --> F["Kelola Toko"]
-    C --> G["Publikasi"]
-    D --> G
-    E --> G
-    F --> G
-    G --> H["Pantau Analytics"]
+    A["Login"]:::step
+    B["Dashboard"]:::step
+    C["Kelola Produk"]:::step
+    D["Kelola Promo"]:::step
+    E["Kelola Konten"]:::step
+    F["Kelola Toko"]:::step
+    G["Publikasi"]:::step
+    H["Pantau Analytics"]:::end
 
-    style A fill:#fff3e0
-    style H fill:#c8e6c9
+    A --> B
+    B --> C --> G
+    B --> D --> G
+    B --> E --> G
+    B --> F --> G
+    G --> H
+
+    classDef step fill:#fff3e0,stroke:#ef6c00,stroke-width:1.5px,color:#e65100
+    classDef end fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
 ```
 
 ---
@@ -83,35 +90,38 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph BACKEND["Backend"]
-        PHP["PHP 8.2+ Native<br/>Tanpa Framework"]
-        NoComposer["Tanpa Composer"]
+        PHP["PHP 8.2+ Native<br/>Tanpa Framework"]:::tech
+        NoComposer["Tanpa Composer"]:::no
     end
 
     subgraph FRONTEND["Frontend"]
-        HTML5["HTML5"]
-        CSS["CSS3 / Tailwind"]
-        JS["JS Vanilla / Alpine.js"]
+        HTML5["HTML5"]:::tech
+        CSS["CSS3 / Tailwind"]:::tech
+        JS["JS Vanilla / Alpine.js"]:::tech
     end
 
     subgraph DATABASE["Database"]
-        MySQL["MySQL 8+ / MariaDB 10.5+"]
-        PDO["PDO MySQL"]
+        MySQL["MySQL 8+ / MariaDB 10.5+"]:::tech
+        PDO["PDO MySQL"]:::tech
     end
 
     subgraph SERVER["Server"]
-        Apache["Apache 2.4 + mod_rewrite"]
-        Linux["Linux OS"]
+        Apache["Apache 2.4 + mod_rewrite"]:::tech
+        Linux["Linux OS"]:::tech
     end
 
     subgraph SECURITY["Security"]
-        Native["Native PHP Security<br/>8 Lapis"]
+        Native["Native PHP Security<br/>8 Lapis"]:::tech
     end
 
-    style BACKEND fill:#e3f2fd
-    style FRONTEND fill:#fff3e0
-    style DATABASE fill:#f3e5f5
-    style SERVER fill:#e8f5e9
-    style SECURITY fill:#ffebee
+    classDef tech fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef no fill:#ffebee,stroke:#c62828,stroke-width:1.5px,color:#b71c1c,font-weight:bold
+
+    style BACKEND fill:#f5faff,stroke:#1565c0,color:#0d47a1
+    style FRONTEND fill:#fff8e1,stroke:#ef6c00,color:#e65100
+    style DATABASE fill:#f3e5f5,stroke:#6a1b9a,color:#4a148c
+    style SERVER fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
+    style SECURITY fill:#fce4ec,stroke:#ad1457,color:#880e4f
 ```
 
 ### Detail Tech Stack
@@ -141,22 +151,26 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A["Tidak Dipakai"] --> B["Framework PHP<br/>Laravel, Symfony, CI"]
-    A --> C["Composer<br/>dan vendor/"]
-    A --> D["Node.js<br/>npm, webpack, vite"]
-    A --> E["Template Engine<br/>Blade, Twig"]
-    A --> F["ORM<br/>Eloquent, Doctrine"]
-    A --> G["CMS Siap Pakai<br/>WordPress"]
-    A --> H["Library Keamanan<br/>Eksternal"]
+    A["Tidak Dipakai"]:::root
 
-    style A fill:#ffcdd2
-    style B fill:#ffcdd2
-    style C fill:#ffcdd2
-    style D fill:#ffcdd2
-    style E fill:#ffcdd2
-    style F fill:#ffcdd2
-    style G fill:#ffcdd2
-    style H fill:#ffcdd2
+    B["Framework PHP<br/>Laravel, Symfony, CI"]:::no
+    C["Composer<br/>dan vendor/"]:::no
+    D["Node.js<br/>npm, webpack, vite"]:::no
+    E["Template Engine<br/>Blade, Twig"]:::no
+    F["ORM<br/>Eloquent, Doctrine"]:::no
+    G["CMS Siap Pakai<br/>WordPress"]:::no
+    H["Library Keamanan<br/>Eksternal"]:::no
+
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    A --> G
+    A --> H
+
+    classDef root fill:#b71c1c,stroke:#7f0000,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef no fill:#ffebee,stroke:#c62828,stroke-width:1.5px,color:#1a1a1a
 ```
 
 **Alasan:**
@@ -185,35 +199,35 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph CLIENT["Client Layer"]
-        Browser["Browser / Mobile"]
-        WA["WhatsApp App"]
+        Browser["Browser / Mobile"]:::client
+        WA["WhatsApp App"]:::client
     end
 
     subgraph PUBLIC["public/ (Document Root)"]
-        Index["index.php<br/>Front Controller"]
-        Assets["assets/<br/>css, js, images"]
-        Uploads["uploads/<br/>products, banners"]
+        Index["index.php<br/>Front Controller"]:::pub
+        Assets["assets/<br/>css, js, images"]:::pub
+        Uploads["uploads/<br/>products, banners"]:::pub
     end
 
     subgraph CORE["lib/ (Core - Tidak Bisa Diakses)"]
-        Bootstrap["bootstrap.php<br/>Session + Headers + Autoload"]
-        Router["Router.php<br/>Dispatch URL"]
-        DB["Database/<br/>Connection + QueryBuilder"]
-        Security["Security/<br/>8 Lapis Pertahanan"]
-        Auth["Auth/<br/>Login + Role"]
-        Services["Services/<br/>WhatsApp, Upload, Log"]
+        Bootstrap["bootstrap.php<br/>Session + Headers + Autoload"]:::core
+        Router["Router.php<br/>Dispatch URL"]:::core
+        DB["Database/<br/>Connection + QueryBuilder"]:::core
+        Security["Security/<br/>8 Lapis Pertahanan"]:::core
+        Auth["Auth/<br/>Login + Role"]:::core
+        Services["Services/<br/>WhatsApp, Upload, Log"]:::core
     end
 
     subgraph APP["app/ (Application)"]
-        Controllers["Controllers/<br/>Public + Admin"]
-        Models["Models/<br/>Product, Promo, dll"]
-        Views["Views/<br/>Template"]
-        Middleware["Middleware/<br/>Auth, Role, CSRF"]
+        Controllers["Controllers/<br/>Public + Admin"]:::app
+        Models["Models/<br/>Product, Promo, dll"]:::app
+        Views["Views/<br/>Template"]:::app
+        Middleware["Middleware/<br/>Auth, Role, CSRF"]:::app
     end
 
     subgraph DATA["database/"]
-        MySQL[("MySQL<br/>15 Tabel")]
-        Migrations["Migrations/<br/>SQL Files"]
+        MySQL[("MySQL<br/>15 Tabel")]:::data
+        Migrations["Migrations/<br/>SQL Files"]:::data
     end
 
     Browser --> Index
@@ -228,11 +242,17 @@ flowchart TB
     Services --> WA
     Uploads --> Services
 
-    style CLIENT fill:#e3f2fd
-    style PUBLIC fill:#fff3e0
-    style CORE fill:#ffebee
-    style APP fill:#e8f5e9
-    style DATA fill:#f3e5f5
+    classDef client fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef pub fill:#fff3e0,stroke:#ef6c00,stroke-width:1.5px,color:#e65100
+    classDef core fill:#ffebee,stroke:#c62828,stroke-width:1.5px,color:#b71c1c
+    classDef app fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef data fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
+
+    style CLIENT fill:#f5faff,stroke:#1565c0,color:#0d47a1
+    style PUBLIC fill:#fff8e1,stroke:#ef6c00,color:#e65100
+    style CORE fill:#fce4ec,stroke:#ad1457,color:#880e4f
+    style APP fill:#f1f8e9,stroke:#2e7d32,color:#1b5e20
+    style DATA fill:#f3e5f5,stroke:#6a1b9a,color:#4a148c
 ```
 
 ### Penjelasan Lapisan
@@ -270,157 +290,30 @@ tbl-website/
 │       ├── categories/
 │       └── stores/
 │
-├── app/                             <- Application Layer
+├── app/
 │   ├── Controllers/
-│   │   ├── HomeController.php
-│   │   ├── ProductController.php
-│   │   ├── CategoryController.php
-│   │   ├── PromoController.php
-│   │   ├── ProfileController.php
-│   │   ├── StoreController.php
-│   │   ├── InfoController.php
-│   │   ├── WhatsAppController.php
-│   │   ├── SitemapController.php
-│   │   └── Admin/
-│   │       ├── AuthController.php
-│   │       ├── DashboardController.php
-│   │       ├── ProductController.php
-│   │       ├── CategoryController.php
-│   │       ├── PromoController.php
-│   │       ├── ContentController.php
-│   │       ├── StoreController.php
-│   │       ├── UserController.php
-│   │       ├── SettingController.php
-│   │       └── BackupController.php
-│   │
 │   ├── Models/
-│   │   ├── BaseModel.php
-│   │   ├── Product.php
-│   │   ├── ProductImage.php
-│   │   ├── Category.php
-│   │   ├── Promo.php
-│   │   ├── ProductPromo.php
-│   │   ├── Content.php
-│   │   ├── Store.php
-│   │   ├── InfoPage.php
-│   │   ├── Setting.php
-│   │   ├── User.php
-│   │   ├── WhatsAppClick.php
-│   │   └── ActivityLog.php
-│   │
 │   ├── Views/
-│   │   ├── layouts/public.php
-│   │   ├── layouts/admin.php
-│   │   ├── partials/navbar.php
-│   │   ├── partials/footer.php
-│   │   ├── partials/sidebar.php
-│   │   ├── partials/whatsapp-button.php
-│   │   ├── errors/404.php
-│   │   ├── errors/403.php
-│   │   ├── errors/500.php
-│   │   ├── home/index.php
-│   │   ├── products/index.php
-│   │   ├── products/show.php
-│   │   ├── categories/show.php
-│   │   ├── promos/index.php
-│   │   ├── profile/index.php
-│   │   ├── store/index.php
-│   │   ├── info/show.php
-│   │   └── admin/...
-│   │
 │   └── Middleware/
-│       ├── AuthMiddleware.php
-│       ├── RoleMiddleware.php
-│       └── CsrfMiddleware.php
 │
-├── lib/                             <- Core Logic (Aman)
+├── lib/
 │   ├── bootstrap.php
-│   │
 │   ├── Database/
-│   │   ├── Connection.php
-│   │   ├── QueryBuilder.php
-│   │   ├── Migration.php
-│   │   └── Seeder.php
-│   │
 │   ├── Router/
-│   │   ├── Router.php
-│   │   └── Route.php
-│   │
 │   ├── Auth/
-│   │   ├── Auth.php
-│   │   ├── Hash.php
-│   │   └── Role.php
-│   │
-│   ├── Security/                    <- 8 Lapis Pertahanan
-│   │   ├── Csrf.php
-│   │   ├── Xss.php
-│   │   ├── Sanitizer.php
-│   │   ├── Validator.php
-│   │   ├── RateLimit.php
-│   │   ├── Headers.php
-│   │   ├── UploadGuard.php
-│   │   └── PasswordPolicy.php
-│   │
+│   ├── Security/
 │   ├── Services/
-│   │   ├── WhatsAppService.php
-│   │   ├── UploadService.php
-│   │   ├── LogService.php
-│   │   ├── SeoService.php
-│   │   ├── AnalyticsService.php
-│   │   └── BackupService.php
-│   │
 │   ├── Utils/
-│   │   ├── Currency.php
-│   │   ├── Date.php
-│   │   ├── Slug.php
-│   │   ├── Image.php
-│   │   ├── Pagination.php
-│   │   └── Str.php
-│   │
 │   ├── Constants/
-│   │   ├── Routes.php
-│   │   ├── Categories.php
-│   │   ├── Site.php
-│   │   └── WhatsApp.php
-│   │
 │   ├── Config/
-│   │   ├── app.php
-│   │   ├── database.php
-│   │   ├── security.php
-│   │   ├── seo.php
-│   │   └── analytics.php
-│   │
 │   └── Support/
-│       ├── Env.php
-│       └── Collection.php
 │
 ├── database/
 │   ├── migrate.php
 │   ├── seed.php
 │   ├── schema.sql
 │   ├── migrations/
-│   │   ├── 001_create_users.sql
-│   │   ├── 002_create_categories.sql
-│   │   ├── 003_create_products.sql
-│   │   ├── 004_create_product_images.sql
-│   │   ├── 005_create_promos.sql
-│   │   ├── 006_create_product_promos.sql
-│   │   ├── 007_create_contents.sql
-│   │   ├── 008_create_stores.sql
-│   │   ├── 009_create_info_pages.sql
-│   │   ├── 010_create_settings.sql
-│   │   ├── 011_create_whatsapp_clicks.sql
-│   │   ├── 012_create_activity_logs.sql
-│   │   ├── 013_create_sessions.sql
-│   │   ├── 014_create_login_attempts.sql
-│   │   └── 015_create_rate_limits.sql
 │   └── seeds/
-│       ├── UserSeeder.php
-│       ├── CategorySeeder.php
-│       ├── ProductSeeder.php
-│       ├── ContentSeeder.php
-│       ├── SettingSeeder.php
-│       └── InfoPageSeeder.php
 │
 ├── routes/
 │   ├── web.php
@@ -428,9 +321,6 @@ tbl-website/
 │
 ├── storage/
 │   ├── logs/
-│   │   ├── app.log
-│   │   ├── security.log
-│   │   └── error.log
 │   ├── cache/
 │   ├── sessions/
 │   └── backups/
@@ -445,6 +335,8 @@ tbl-website/
 ├── .htaccess
 └── README.md
 ```
+
+> Detail lengkap tiap folder sudah dijelaskan pada bab sebelumnya.
 
 ---
 
@@ -500,28 +392,37 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A["Admin buka /admin/login"] --> B["GET /admin/login"]
-    B --> C["AuthController@showLogin"]
-    C --> D["Render form + CSRF token"]
-    D --> E["Admin submit form"]
-    E --> F["POST /admin/login"]
-    F --> G["CsrfMiddleware::checkOrFail()"]
-    G -->|Gagal| H["419 CSRF Invalid"]
-    G -->|Sukses| I["Sanitizer + Validator"]
-    I --> J["RateLimit::hit()"]
-    J -->|Melebihi| K["Tolak: Terlalu banyak percobaan"]
-    J -->|OK| L["Auth::attempt()"]
-    L --> M["Query user + password_verify()"]
-    M -->|Gagal| N["Log attempt + Redirect"]
-    M -->|Sukses| O["session_regenerate_id()"]
-    O --> P["Set $_SESSION[user]"]
-    P --> Q["Csrf::rotate()"]
-    Q --> R["Redirect /admin/dashboard"]
+    A["Admin buka /admin/login"]:::step
+    B["GET /admin/login"]:::step
+    C["AuthController@showLogin"]:::step
+    D["Render form + CSRF token"]:::step
+    E["Admin submit form"]:::step
+    F["POST /admin/login"]:::step
+    G{"CsrfMiddleware<br/>checkOrFail?"}:::check
+    H["419 CSRF Invalid"]:::fail
+    I["Sanitizer + Validator"]:::step
+    J{"RateLimit::hit()?"}:::check
+    K["Tolak: Terlalu banyak percobaan"]:::fail
+    L["Auth::attempt()"]:::step
+    M{"password_verify()?"}:::check
+    N["Log attempt + Redirect"]:::fail
+    O["session_regenerate_id()"]:::step
+    P["Set $_SESSION[user]"]:::step
+    Q["Csrf::rotate()"]:::step
+    R["Redirect /admin/dashboard"]:::success
 
-    style H fill:#ffcdd2
-    style K fill:#ffcdd2
-    style N fill:#ffcdd2
-    style R fill:#c8e6c9
+    A --> B --> C --> D --> E --> F --> G
+    G -->|Gagal| H
+    G -->|Sukses| I --> J
+    J -->|Melebihi| K
+    J -->|OK| L --> M
+    M -->|Gagal| N
+    M -->|Sukses| O --> P --> Q --> R
+
+    classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef check fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17,font-weight:bold
+    classDef fail fill:#ffcdd2,stroke:#c62828,stroke-width:1.5px,color:#b71c1c
+    classDef success fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20,font-weight:bold
 ```
 
 ### Aturan Keamanan Login
@@ -543,62 +444,71 @@ flowchart TD
 ```mermaid
 flowchart LR
     subgraph L1["Lapis 1: Struktur"]
-        A1["public/ = document root"]
-        A2[".htaccess blokir folder"]
-        A3["File inti di luar web"]
+        A1["public/ = document root"]:::layer1
+        A2[".htaccess blokir folder"]:::layer1
+        A3["File inti di luar web"]:::layer1
     end
 
     subgraph L2["Lapis 2: Input"]
-        B1["Sanitizer::string()"]
-        B2["Validator::required()"]
-        B3["Whitelist ekstensi"]
+        B1["Sanitizer::string()"]:::layer2
+        B2["Validator::required()"]:::layer2
+        B3["Whitelist ekstensi"]:::layer2
     end
 
     subgraph L3["Lapis 3: Query"]
-        C1["PDO Prepared Statement"]
-        C2["EMULATE_PREPARES=false"]
-        C3["QueryBuilder validasi kolom"]
+        C1["PDO Prepared Statement"]:::layer3
+        C2["EMULATE_PREPARES=false"]:::layer3
+        C3["QueryBuilder validasi kolom"]:::layer3
     end
 
     subgraph L4["Lapis 4: Output"]
-        D1["Xss::e() escape"]
-        D2["htmlspecialchars()"]
+        D1["Xss::e() escape"]:::layer4
+        D2["htmlspecialchars()"]:::layer4
     end
 
     subgraph L5["Lapis 5: Session"]
-        E1["session_regenerate_id()"]
-        E2["HttpOnly + Secure + SameSite"]
-        E3["Timeout 30 menit"]
+        E1["session_regenerate_id()"]:::layer5
+        E2["HttpOnly + Secure + SameSite"]:::layer5
+        E3["Timeout 30 menit"]:::layer5
     end
 
     subgraph L6["Lapis 6: CSRF"]
-        F1["Token per session"]
-        F2["hash_equals()"]
-        F3["Rotate setelah login"]
+        F1["Token per session"]:::layer6
+        F2["hash_equals()"]:::layer6
+        F3["Rotate setelah login"]:::layer6
     end
 
     subgraph L7["Lapis 7: Rate Limit"]
-        G1["Login max 5x"]
-        G2["Request max 60/menit"]
-        G3["Lockout 15 menit"]
+        G1["Login max 5x"]:::layer7
+        G2["Request max 60/menit"]:::layer7
+        G3["Lockout 15 menit"]:::layer7
     end
 
     subgraph L8["Lapis 8: Headers"]
-        H1["CSP"]
-        H2["X-Frame-Options"]
-        H3["HSTS"]
+        H1["CSP"]:::layer8
+        H2["X-Frame-Options"]:::layer8
+        H3["HSTS"]:::layer8
     end
 
     L1 --> L2 --> L3 --> L4 --> L5 --> L6 --> L7 --> L8
 
-    style L1 fill:#e1f5fe
-    style L2 fill:#b3e5fc
-    style L3 fill:#81d4fa
-    style L4 fill:#4fc3f7
-    style L5 fill:#29b6f6
-    style L6 fill:#03a9f4
-    style L7 fill:#039be5
-    style L8 fill:#0288d1,color:#fff
+    classDef layer1 fill:#e1f5fe,stroke:#01579b,stroke-width:1.5px,color:#01579b
+    classDef layer2 fill:#b3e5fc,stroke:#0277bd,stroke-width:1.5px,color:#01579b
+    classDef layer3 fill:#81d4fa,stroke:#0288d1,stroke-width:1.5px,color:#014f86
+    classDef layer4 fill:#4fc3f7,stroke:#039be5,stroke-width:1.5px,color:#013a63
+    classDef layer5 fill:#29b6f6,stroke:#03a9f4,stroke-width:1.5px,color:#012a4a
+    classDef layer6 fill:#03a9f4,stroke:#0288d1,stroke-width:1.5px,color:#ffffff
+    classDef layer7 fill:#039be5,stroke:#0277bd,stroke-width:1.5px,color:#ffffff
+    classDef layer8 fill:#0288d1,stroke:#01579b,stroke-width:1.5px,color:#ffffff
+
+    style L1 fill:#f5faff,stroke:#01579b,color:#01579b
+    style L2 fill:#f5faff,stroke:#0277bd,color:#01579b
+    style L3 fill:#f5faff,stroke:#0288d1,color:#014f86
+    style L4 fill:#f5faff,stroke:#039be5,color:#013a63
+    style L5 fill:#f5faff,stroke:#03a9f4,color:#012a4a
+    style L6 fill:#f5faff,stroke:#0288d1,color:#0288d1
+    style L7 fill:#f5faff,stroke:#0277bd,color:#0277bd
+    style L8 fill:#f5faff,stroke:#01579b,color:#01579b
 ```
 
 ### Tabel Mitigasi Ancaman
@@ -623,25 +533,31 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    A["Admin Login"] --> B["Dashboard"]
-    B --> C["Menu Produk"]
-    C --> D["Form Tambah Produk"]
-    D --> E["POST /admin/products"]
-    E --> F["AuthMiddleware"]
-    F --> G["RoleMiddleware: product.edit"]
-    G --> H["CsrfMiddleware"]
-    H --> I["ValidatedData()"]
-    I --> J["UploadService::store()"]
-    J --> K["UploadGuard: MIME + ext + size"]
-    K --> L["Simpan ke uploads/products/"]
-    L --> M["QueryBuilder::insert()"]
-    M --> N["MySQL: products"]
-    N --> O["QueryBuilder::insert()"]
-    O --> P["MySQL: product_images"]
-    P --> Q["Log activity"]
-    Q --> R["Redirect + Flash success"]
+    A["Admin Login"]:::step
+    B["Dashboard"]:::step
+    C["Menu Produk"]:::step
+    D["Form Tambah Produk"]:::step
+    E["POST /admin/products"]:::step
+    F["AuthMiddleware"]:::check
+    G["RoleMiddleware: product.edit"]:::check
+    H["CsrfMiddleware"]:::check
+    I["ValidatedData()"]:::step
+    J["UploadService::store()"]:::step
+    K["UploadGuard: MIME + ext + size"]:::check
+    L["Simpan ke uploads/products/"]:::step
+    M["QueryBuilder::insert()"]:::step
+    N[("MySQL: products")]:::data
+    O["QueryBuilder::insert()"]:::step
+    P[("MySQL: product_images")]:::data
+    Q["Log activity"]:::step
+    R["Redirect + Flash success"]:::success
 
-    style R fill:#c8e6c9
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K --> L --> M --> N --> O --> P --> Q --> R
+
+    classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef check fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17,font-weight:bold
+    classDef data fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
+    classDef success fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20,font-weight:bold
 ```
 
 ### Validasi Data Produk
@@ -662,21 +578,27 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    A["Pengunjung"] --> B["Homepage"]
-    B --> C["Klik Katalog"]
-    C --> D["Filter / Cari Produk"]
-    D --> E["Detail Produk"]
-    E --> F["Klik CTA WhatsApp"]
-    F --> G["WhatsAppService::link()"]
-    G --> H["Generate URL wa.me"]
-    H --> I["Buka WhatsApp"]
-    I --> J["Pesan otomatis:<br/>Halo TBL, saya ingin<br/>konsultasi produk X"]
-    F --> K["WhatsAppService::track()"]
-    K --> L["MySQL: whatsapp_clicks"]
-    L --> M["Analytics Dashboard"]
+    A["Pengunjung"]:::step
+    B["Homepage"]:::step
+    C["Klik Katalog"]:::step
+    D["Filter / Cari Produk"]:::step
+    E["Detail Produk"]:::step
+    F["Klik CTA WhatsApp"]:::step
+    G["WhatsAppService::link()"]:::step
+    H["Generate URL wa.me"]:::step
+    I["Buka WhatsApp"]:::step
+    J["Pesan otomatis<br/>Halo TBL, saya ingin<br/>konsultasi produk X"]:::success
+    K["WhatsAppService::track()"]:::step
+    L[("MySQL: whatsapp_clicks")]:::data
+    M["Analytics Dashboard"]:::success
 
-    style J fill:#c8e6c9
-    style M fill:#fff9c4
+    A --> B --> C --> D --> E --> F
+    F --> G --> H --> I --> J
+    F --> K --> L --> M
+
+    classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef data fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
+    classDef success fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20,font-weight:bold
 ```
 
 ### Format Pesan WhatsApp
@@ -686,23 +608,16 @@ Halo TBL, saya ingin konsultasi produk {nama_produk}.
 {url_produk}
 ```
 
-Contoh:
-
-```
-Halo TBL, saya ingin konsultasi produk Sofa Minimalis 3 Seater.
-https://tbl.com/produk/sofa-minimalis-3-seater
-```
-
 ### Tracking Klik
 
-Setiap klik CTA WhatsApp dicatat di tabel whatsapp_clicks:
-
-- product_id — produk yang dilihat
-- page_url — halaman asal
-- referrer — sumber traffic
-- user_agent — perangkat
-- ip_address — lokasi
-- clicked_at — waktu klik
+| Kolom | Fungsi |
+|---|---|
+| product_id | Produk yang dilihat |
+| page_url | Halaman asal |
+| referrer | Sumber traffic |
+| user_agent | Perangkat |
+| ip_address | Lokasi |
+| clicked_at | Waktu klik |
 
 ---
 
@@ -746,10 +661,6 @@ mindmap
       Login
       Dashboard
       Produk
-        List
-        Create
-        Edit
-        Delete
       Kategori
       Promo
       Konten Homepage
@@ -904,28 +815,40 @@ erDiagram
 
 ```mermaid
 flowchart TD
-    A["Request masuk"] --> B["public/index.php"]
-    B --> C["bootstrap.php"]
-    C --> D{"Method?"}
-    D -->|GET| E["routes/web.php"]
-    D -->|GET| F["routes/admin.php"]
-    D -->|POST| F
-    E --> G["Router::dispatch()"]
-    F --> G
-    G --> H{"Exact match?"}
-    H -->|Ya| I["Call handler"]
-    H -->|Tidak| J{"Dynamic /{slug}?"}
-    J -->|Ya| K["Extract params"]
-    J -->|Tidak| L["404"]
-    K --> I
-    I --> M["Middleware"]
-    M --> N["Controller"]
-    N --> O["Model"]
-    O --> P["View"]
-    P --> Q["Response"]
+    A["Request masuk"]:::step
+    B["public/index.php"]:::step
+    C["bootstrap.php"]:::step
+    D{"Method?"}:::check
+    E["routes/web.php"]:::step
+    F["routes/admin.php"]:::step
+    G["Router::dispatch()"]:::step
+    H{"Exact match?"}:::check
+    I["Call handler"]:::step
+    J{"Dynamic /{slug}?"}:::check
+    K["Extract params"]:::step
+    L["404"]:::fail
+    M["Middleware"]:::step
+    N["Controller"]:::step
+    O["Model"]:::step
+    P["View"]:::step
+    Q["Response"]:::success
 
-    style L fill:#ffcdd2
-    style Q fill:#c8e6c9
+    A --> B --> C --> D
+    D -->|GET| E
+    D -->|GET/POST| F
+    E --> G
+    F --> G
+    G --> H
+    H -->|Ya| I
+    H -->|Tidak| J
+    J -->|Ya| K --> I
+    J -->|Tidak| L
+    I --> M --> N --> O --> P --> Q
+
+    classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef check fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17,font-weight:bold
+    classDef fail fill:#ffcdd2,stroke:#c62828,stroke-width:1.5px,color:#b71c1c
+    classDef success fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20,font-weight:bold
 ```
 
 ### Route Publik
@@ -963,38 +886,36 @@ flowchart TD
 ```mermaid
 flowchart LR
     subgraph MVP["MVP - Wajib"]
-        A1["Homepage dinamis"]
-        A2["Katalog produk"]
-        A3["Detail produk"]
-        A4["CTA WhatsApp"]
-        A5["Dashboard admin"]
-        A6["CRUD produk"]
-        A7["Manajemen promo"]
-        A8["Profil & lokasi toko"]
-        A9["Responsive mobile"]
-        A10["SEO dasar"]
+        A1["Homepage dinamis"]:::mvp
+        A2["Katalog produk"]:::mvp
+        A3["Detail produk"]:::mvp
+        A4["CTA WhatsApp"]:::mvp
+        A5["Dashboard admin"]:::mvp
+        A6["CRUD produk"]:::mvp
+        A7["Manajemen promo"]:::mvp
+        A8["Profil & lokasi toko"]:::mvp
+        A9["Responsive mobile"]:::mvp
+        A10["SEO dasar"]:::mvp
     end
 
     subgraph FASE2["Fase 2"]
-        B1["Transaksi online"]
-        B2["Payment gateway"]
-        B3["CRM"]
-        B4["Logistik"]
-        B5["Multi bahasa"]
-        B6["Mobile app"]
-        B7["Analytics lanjutan"]
+        B1["Transaksi online"]:::next
+        B2["Payment gateway"]:::next
+        B3["CRM"]:::next
+        B4["Logistik"]:::next
+        B5["Multi bahasa"]:::next
+        B6["Mobile app"]:::next
+        B7["Analytics lanjutan"]:::next
     end
 
     MVP --> FASE2
 
-    style MVP fill:#c8e6c9
-    style FASE2 fill:#bbdefb
-```
+    classDef mvp fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef next fill:#bbdefb,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
 
-| Prioritas | Fitur |
-|---|---|
-| MVP | Homepage, katalog, detail produk, CTA WhatsApp, admin CRUD, promo, profil, responsive, SEO |
-| Fase 2 | Transaksi, payment, CRM, logistik, multi bahasa, mobile app |
+    style MVP fill:#f1f8e9,stroke:#2e7d32,color:#1b5e20
+    style FASE2 fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
+```
 
 ---
 
@@ -1003,16 +924,17 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph SERVER["Server Requirements"]
-        A["CPU: 1 core"]
-        B["RAM: 512 MB"]
-        C["Storage: 5 GB"]
-        D["PHP 8.2+"]
-        E["MySQL 8+ / MariaDB 10.5+"]
-        F["Apache 2.4 + mod_rewrite"]
-        G["SSL/HTTPS"]
+        A["CPU: 1 core"]:::server
+        B["RAM: 512 MB"]:::server
+        C["Storage: 5 GB"]:::server
+        D["PHP 8.2+"]:::server
+        E["MySQL 8+ / MariaDB 10.5+"]:::server
+        F["Apache 2.4 + mod_rewrite"]:::server
+        G["SSL/HTTPS"]:::server
     end
 
-    style SERVER fill:#e8f5e9
+    classDef server fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    style SERVER fill:#f1f8e9,stroke:#2e7d32,color:#1b5e20
 ```
 
 ### Spesifikasi
@@ -1040,21 +962,6 @@ flowchart TB
 | session | Session management |
 | filter | Validasi input |
 | hash | Hashing password |
-
-### Kompatibilitas Hosting
-
-```mermaid
-flowchart LR
-    A["Hosting"] --> B["Shared Hosting<br/>cPanel / DirectAdmin"]
-    A --> C["VPS<br/>Ubuntu / Debian"]
-    A --> D["Cloud<br/>AWS / GCP / DO"]
-    A --> E["Dedicated Server"]
-
-    style B fill:#c8e6c9
-    style C fill:#c8e6c9
-    style D fill:#c8e6c9
-    style E fill:#c8e6c9
-```
 
 ---
 
@@ -1098,25 +1005,319 @@ flowchart LR
 
 ---
 
-## 17. Kesimpulan
+## 17. Timeline Pengerjaan
+
+### Asumsi
+
+- 1 developer fullstack (PHP native)
+- 1 desainer UI/UX (paruh waktu)
+- 1 QA (paruh waktu)
+- Kerja 5 hari/minggu, 8 jam/hari
+
+### Fase MVP (8 Minggu)
+
+```mermaid
+gantt
+    title Timeline MVP Website TBL
+    dateFormat  YYYY-MM-DD
+    axisFormat  %d %b
+
+    section Perencanaan
+    Analisis kebutuhan         :a1, 2026-10-01, 5d
+    Desain UI/UX              :a2, after a1, 10d
+
+    section Setup
+    Setup server & database   :b1, after a2, 2d
+    Struktur folder & config  :b2, after b1, 2d
+
+    section Development
+    Core (Router, DB, Auth)   :c1, after b2, 7d
+    Security layer            :c2, after c1, 5d
+    Frontend publik           :c3, after c2, 10d
+    Admin dashboard           :c4, after c3, 10d
+    Integrasi WhatsApp        :c5, after c4, 2d
+
+    section Testing
+    Unit & feature test       :d1, after c5, 5d
+    UAT bersama TBL           :d2, after d1, 5d
+    Perbaikan bug             :d3, after d2, 5d
+
+    section Go Live
+    Deployment produksi       :e1, after d3, 2d
+    Training admin TBL        :e2, after e1, 3d
+```
+
+### Rincian Waktu
+
+| Fase | Durasi | Deliverable |
+|---|---|---|
+| Perencanaan | 2 minggu | Dokumen kebutuhan, desain UI/UX |
+| Setup | 1 minggu | Server siap, struktur folder |
+| Development Core | 2 minggu | Router, DB, Auth, Security |
+| Development Frontend | 2 minggu | Homepage, katalog, detail produk |
+| Development Admin | 2 minggu | Dashboard, CRUD produk, promo |
+| Testing | 2 minggu | UAT, perbaikan bug |
+| Go Live | 1 minggu | Deployment, training |
+| **Total** | **8 minggu** | Website live & siap pakai |
+
+---
+
+## 18. Anggaran
+
+> **Catatan:** Estimasi pasar Indonesia 2026, skala UMKM-menengah. Angka dapat berubah sesuai vendor, lokasi, dan kompleksitas.
+
+### 18.1 Ringkasan Anggaran
 
 ```mermaid
 flowchart TB
-    A["Website TBL"] --> B["Frontend Publik"]
-    A --> C["Backend Admin"]
-    A --> D["Keamanan Berlapis"]
-    A --> E["Database MySQL"]
+    A["Total Anggaran"]:::root
 
-    B --> B1["Homepage -> Katalog -> Detail -> WhatsApp"]
-    C --> C1["Kelola Produk, Promo, Konten, Toko"]
-    D --> D1["8 Lapis: Struktur, Input, Query, Output, Session, CSRF, Rate Limit, Headers"]
-    E --> E1["15 Tabel Relasional"]
+    B["Pengembangan<br/>Rp 24.000.000"]:::dev
+    C["Infrastruktur<br/>Rp 1.050.000/tahun"]:::infra
+    D["Operasional<br/>Rp 1.500.000/bulan"]:::ops
+    E["Fase 2<br/>Rp 20.000.000+"]:::fase
 
-    style A fill:#4fc3f7,color:#fff
-    style B fill:#c8e6c9
-    style C fill:#fff9c4
-    style D fill:#ffcdd2
-    style E fill:#e1bee7
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+
+    classDef root fill:#1565c0,stroke:#0d47a1,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef dev fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef infra fill:#fff3e0,stroke:#ef6c00,stroke-width:1.5px,color:#e65100
+    classDef ops fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
+    classDef fase fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+```
+
+---
+
+### 18.2 Biaya Pengembangan (One-Time)
+
+#### Opsi A: Freelancer / Tim Kecil
+
+| No | Item | Deskripsi | Biaya |
+|---|---|---|---|
+| 1 | Analisis & Perencanaan | Requirement, user flow, wireframe | Rp 1.500.000 |
+| 2 | Desain UI/UX | Mockup homepage, katalog, admin | Rp 3.000.000 |
+| 3 | Frontend Development | Homepage, katalog, detail produk | Rp 4.000.000 |
+| 4 | Backend Development | Router, DB, Auth, API internal | Rp 6.000.000 |
+| 5 | Admin Dashboard | CMS, CRUD produk, promo, konten | Rp 3.500.000 |
+| 6 | Security Implementation | 8 lapis keamanan | Rp 2.500.000 |
+| 7 | Integrasi WhatsApp | CTA + tracking klik | Rp 500.000 |
+| 8 | SEO Setup Dasar | Meta, sitemap, robots.txt | Rp 1.000.000 |
+| 9 | Testing & QA | Unit test, UAT, bug fixing | Rp 1.500.000 |
+| 10 | Deployment & Training | Setup server, training admin | Rp 500.000 |
+| **TOTAL** | | | **Rp 24.000.000** |
+
+#### Opsi B: Agency / Studio
+
+| No | Item | Biaya |
+|---|---|---|
+| 1 | Paket pengembangan penuh | Rp 45.000.000 – Rp 80.000.000 |
+| 2 | Maintenance 1 tahun | Rp 8.000.000 – Rp 15.000.000 |
+| **TOTAL** | | **Rp 53.000.000 – Rp 95.000.000** |
+
+#### Opsi C: In-House
+
+| No | Item | Biaya |
+|---|---|---|
+| 1 | Gaji developer 2 bulan | Rp 16.000.000 – Rp 24.000.000 |
+| 2 | Gaji desainer 1 bulan | Rp 5.000.000 – Rp 8.000.000 |
+| 3 | Tools & lisensi | Rp 1.000.000 |
+| **TOTAL** | | **Rp 22.000.000 – Rp 33.000.000** |
+
+> **Rekomendasi TBL:** Opsi A (Freelancer) — paling efisien untuk scope MVP.
+
+---
+
+### 18.3 Biaya Infrastruktur (Tahunan)
+
+#### Opsi Shared Hosting (Hemat)
+
+| No | Item | Biaya/Tahun |
+|---|---|---|
+| 1 | Domain .com | Rp 150.000 |
+| 2 | Shared Hosting 5 GB | Rp 600.000 |
+| 3 | SSL Let's Encrypt | Rp 0 |
+| 4 | Backup storage | Rp 300.000 |
+| **TOTAL** | | **Rp 1.050.000/tahun** |
+
+#### Opsi VPS (Rekomendasi)
+
+| No | Item | Biaya/Tahun |
+|---|---|---|
+| 1 | Domain .com | Rp 150.000 |
+| 2 | VPS 2 GB RAM | Rp 1.800.000 |
+| 3 | SSL Let's Encrypt | Rp 0 |
+| 4 | Backup storage | Rp 500.000 |
+| 5 | Monitoring (UptimeRobot) | Rp 300.000 |
+| **TOTAL** | | **Rp 2.750.000/tahun** |
+
+#### Opsi Cloud (Enterprise)
+
+| No | Item | Biaya/Tahun |
+|---|---|---|
+| 1 | Domain .com | Rp 150.000 |
+| 2 | Cloud VPS (AWS/GCP/DO) | Rp 4.800.000 |
+| 3 | SSL Premium | Rp 1.200.000 |
+| 4 | CDN (Cloudflare Pro) | Rp 3.000.000 |
+| 5 | Backup & monitoring | Rp 1.500.000 |
+| **TOTAL** | | **Rp 10.650.000/tahun** |
+
+> **Rekomendasi TBL:** Opsi VPS — keseimbangan harga & performa.
+
+---
+
+### 18.4 Biaya Operasional (Bulanan)
+
+| No | Item | Biaya/Bulan |
+|---|---|---|
+| 1 | Maintenance & update | Rp 500.000 – Rp 1.000.000 |
+| 2 | Update konten (produk/promo) | Rp 300.000 |
+| 3 | Security monitoring | Rp 300.000 |
+| 4 | Backup verification | Rp 200.000 |
+| 5 | Domain & hosting (amortisasi) | Rp 100.000 – Rp 250.000 |
+| **TOTAL** | | **Rp 1.400.000 – Rp 2.050.000/bulan** |
+
+---
+
+### 18.5 Biaya Fase 2 (Opsional)
+
+| No | Fitur | Estimasi |
+|---|---|---|
+| 1 | Payment Gateway (Midtrans/Xendit) | Rp 5.000.000 – Rp 10.000.000 |
+| 2 | CRM Integration | Rp 8.000.000 – Rp 15.000.000 |
+| 3 | Logistik Integration | Rp 5.000.000 – Rp 10.000.000 |
+| 4 | Multi Bahasa | Rp 3.000.000 – Rp 5.000.000 |
+| 5 | Mobile App (Android + iOS) | Rp 20.000.000 – Rp 40.000.000 |
+| 6 | Analytics Lanjutan | Rp 2.000.000 – Rp 5.000.000 |
+| **TOTAL** | | **Rp 43.000.000 – Rp 85.000.000** |
+
+---
+
+### 18.6 Total Anggaran 3 Tahun
+
+```mermaid
+flowchart LR
+    A["Tahun 1<br/>Rp 43.850.000"]:::y1
+    B["Tahun 2<br/>Rp 19.850.000"]:::y2
+    C["Tahun 3<br/>Rp 19.850.000"]:::y3
+    D["Fase 2<br/>Rp 43.000.000+"]:::fase
+
+    A --> B --> C
+    A -.-> D
+
+    classDef y1 fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
+    classDef y2 fill:#fff3e0,stroke:#ef6c00,stroke-width:1.5px,color:#e65100
+    classDef y3 fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
+    classDef fase fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+```
+
+#### Rincian Tahun 1
+
+| Komponen | Biaya |
+|---|---|
+| Pengembangan (Opsi A) | Rp 24.000.000 |
+| Infrastruktur VPS | Rp 2.750.000 |
+| Operasional 12 bulan | Rp 16.800.000 |
+| **Subtotal Tahun 1** | **Rp 43.550.000** |
+
+#### Rincian Tahun 2 & 3
+
+| Komponen | Biaya/Tahun |
+|---|---|
+| Infrastruktur VPS | Rp 2.750.000 |
+| Operasional 12 bulan | Rp 16.800.000 |
+| **Subtotal per Tahun** | **Rp 19.550.000** |
+
+#### Total 3 Tahun
+
+| Tahun | Biaya |
+|---|---|
+| Tahun 1 | Rp 43.550.000 |
+| Tahun 2 | Rp 19.550.000 |
+| Tahun 3 | Rp 19.550.000 |
+| **TOTAL 3 TAHUN** | **Rp 82.650.000** |
+
+---
+
+### 18.7 Rekomendasi Anggaran TBL
+
+| Prioritas | Alokasi | Keterangan |
+|---|---|---|
+| **Wajib** | Pengembangan MVP | Rp 24.000.000 |
+| **Wajib** | Infrastruktur VPS 1 tahun | Rp 2.750.000 |
+| **Wajib** | Operasional 1 tahun | Rp 16.800.000 |
+| **Cadangan** | Bug & revisi | Rp 3.000.000 |
+| **Total Awal** | | **Rp 46.550.000** |
+
+**Skema Pembayaran yang Disarankan:**
+
+| Termin | Persentase | Nominal | Trigger |
+|---|---|---|---|
+| DP | 30% | Rp 7.200.000 | Tanda tangan kontrak |
+| Termin 2 | 30% | Rp 7.200.000 | Desain & struktur selesai |
+| Termin 3 | 30% | Rp 7.200.000 | Development selesai |
+| Pelunasan | 10% | Rp 2.400.000 | Go live & training |
+| **Total** | **100%** | **Rp 24.000.000** | |
+
+---
+
+### 18.8 ROI (Return on Investment)
+
+Asumsi:
+
+- Rata-rata penjualan via WhatsApp: 20 transaksi/bulan
+- Nilai transaksi rata-rata: Rp 3.500.000
+- Konversi naik 30% setelah website live
+- Margin kotor: 25%
+
+| Bulan | Transaksi | Omzet | Margin |
+|---|---|---|---|
+| Sebelum website | 20 | Rp 70.000.000 | Rp 17.500.000 |
+| Setelah website | 26 | Rp 91.000.000 | Rp 22.750.000 |
+| **Kenaikan** | **+6** | **+Rp 21.000.000** | **+Rp 5.250.000/bulan** |
+
+**Break-even:**
+
+| Item | Nilai |
+|---|---|
+| Total investasi awal | Rp 46.550.000 |
+| Kenaikan margin/bulan | Rp 5.250.000 |
+| **BEP** | **± 9 bulan** |
+
+---
+
+## 19. Kesimpulan
+
+```mermaid
+flowchart TB
+    A["Website TBL"]:::root
+
+    B["Frontend Publik"]:::pub
+    C["Backend Admin"]:::adm
+    D["Keamanan Berlapis"]:::sec
+    E["Database MySQL"]:::data
+    F["Anggaran"]:::ang
+
+    B1["Homepage → Katalog → Detail → WhatsApp"]:::pub
+    C1["Kelola Produk, Promo, Konten, Toko"]:::adm
+    D1["8 Lapis: Struktur, Input, Query,<br/>Output, Session, CSRF, Rate Limit, Headers"]:::sec
+    E1["15 Tabel Relasional"]:::data
+    F1["Rp 46.550.000<br/>BEP ± 9 bulan"]:::ang
+
+    A --> B --> B1
+    A --> C --> C1
+    A --> D --> D1
+    A --> E --> E1
+    A --> F --> F1
+
+    classDef root fill:#1565c0,stroke:#0d47a1,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef pub fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef adm fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17
+    classDef sec fill:#ffcdd2,stroke:#c62828,stroke-width:1.5px,color:#b71c1c
+    classDef data fill:#e1bee7,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
+    classDef ang fill:#b3e5fc,stroke:#0277bd,stroke-width:1.5px,color:#01579b
 ```
 
 ### Poin Utama
@@ -1127,19 +1328,21 @@ flowchart TB
 | Dependency | Tanpa Composer, tanpa Node.js |
 | Keamanan | 8 lapis pertahanan native |
 | Database | 15 tabel MySQL relasional |
-| Struktur | PHP native statis, modular |
-| Hosting | Shared hosting murah OK |
+| Hosting | VPS direkomendasikan |
 | Skalabilitas | Siap ke transaksi, CRM, payment |
 | Maintenance | Mudah, tanpa update framework |
+| **Investasi Awal** | **Rp 46.550.000** |
+| **Operasional/Bulan** | **Rp 1.400.000 – Rp 2.050.000** |
+| **BEP** | **± 9 bulan** |
 
 ### Inti Website
 
-- Publik: Homepage -> Katalog -> Detail Produk -> WhatsApp
-- Admin: Login -> Dashboard -> CRUD Produk/Promo/Konten
+- Publik: Homepage → Katalog → Detail Produk → WhatsApp
+- Admin: Login → Dashboard → CRUD Produk/Promo/Konten
 - Keamanan: 8 lapis pertahanan tanpa dependency eksternal
 - Database: 15 tabel MySQL relasional
-- Struktur: PHP native statis, aman, ringan, scalable
+- Anggaran: Rp 46.550.000 (investasi awal) dengan BEP ± 9 bulan
 
 ---
 
-(c) 2026 TBL Sofa & Furniture — Dokumentasi Teknis
+© 2026 TBL Sofa & Furniture Dokumentasi Teknis
