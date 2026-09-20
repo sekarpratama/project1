@@ -49,12 +49,15 @@ flowchart LR
     B["Katalog"]:::step
     C["Detail Produk"]:::step
     D["CTA WhatsApp"]:::step
-    E["Konsultasi"]:::end
+    E["Konsultasi"]:::finish
 
-    A --> B --> C --> D --> E
+    A --> B
+    B --> C
+    C --> D
+    D --> E
 
     classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
-    classDef end fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef finish fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
 ```
 
 ### Inti Alur Admin
@@ -68,17 +71,21 @@ flowchart LR
     E["Kelola Konten"]:::step
     F["Kelola Toko"]:::step
     G["Publikasi"]:::step
-    H["Pantau Analytics"]:::end
+    H["Pantau Analytics"]:::finish
 
     A --> B
-    B --> C --> G
-    B --> D --> G
-    B --> E --> G
-    B --> F --> G
+    B --> C
+    B --> D
+    B --> E
+    B --> F
+    C --> G
+    D --> G
+    E --> G
+    F --> G
     G --> H
 
     classDef step fill:#fff3e0,stroke:#ef6c00,stroke-width:1.5px,color:#e65100
-    classDef end fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef finish fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
 ```
 
 ---
@@ -152,7 +159,6 @@ flowchart TB
 ```mermaid
 flowchart LR
     A["Tidak Dipakai"]:::root
-
     B["Framework PHP<br/>Laravel, Symfony, CI"]:::no
     C["Composer<br/>dan vendor/"]:::no
     D["Node.js<br/>npm, webpack, vite"]:::no
@@ -203,13 +209,13 @@ flowchart TB
         WA["WhatsApp App"]:::client
     end
 
-    subgraph PUBLIC["public/ (Document Root)"]
+    subgraph PUBLIC["public - Document Root"]
         Index["index.php<br/>Front Controller"]:::pub
         Assets["assets/<br/>css, js, images"]:::pub
         Uploads["uploads/<br/>products, banners"]:::pub
     end
 
-    subgraph CORE["lib/ (Core - Tidak Bisa Diakses)"]
+    subgraph CORE["lib - Core"]
         Bootstrap["bootstrap.php<br/>Session + Headers + Autoload"]:::core
         Router["Router.php<br/>Dispatch URL"]:::core
         DB["Database/<br/>Connection + QueryBuilder"]:::core
@@ -218,14 +224,14 @@ flowchart TB
         Services["Services/<br/>WhatsApp, Upload, Log"]:::core
     end
 
-    subgraph APP["app/ (Application)"]
+    subgraph APP["app - Application"]
         Controllers["Controllers/<br/>Public + Admin"]:::app
         Models["Models/<br/>Product, Promo, dll"]:::app
         Views["Views/<br/>Template"]:::app
         Middleware["Middleware/<br/>Auth, Role, CSRF"]:::app
     end
 
-    subgraph DATA["database/"]
+    subgraph DATA["database"]
         MySQL[("MySQL<br/>15 Tabel")]:::data
         Migrations["Migrations/<br/>SQL Files"]:::data
     end
@@ -336,8 +342,6 @@ tbl-website/
 └── README.md
 ```
 
-> Detail lengkap tiap folder sudah dijelaskan pada bab sebelumnya.
-
 ---
 
 ## 5. Alur Request
@@ -345,9 +349,9 @@ tbl-website/
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant H as .htaccess
-    participant I as public/index.php
-    participant B as lib/bootstrap.php
+    participant H as htaccess
+    participant I as index.php
+    participant B as bootstrap.php
     participant R as Router
     participant M as Middleware
     participant C as Controller
@@ -362,9 +366,9 @@ sequenceDiagram
     B->>R: Init Router
     R->>R: Match route /produk/{slug}
     R->>M: Cek Middleware
-    M->>C: ProductController@show
-    C->>Mo: Product::findBySlug()
-    Mo->>DB: SELECT ... WHERE slug=?
+    M->>C: ProductController show
+    C->>Mo: Product findBySlug
+    Mo->>DB: SELECT WHERE slug
     DB-->>Mo: Data produk
     Mo-->>C: Return product
     C->>V: Render view
@@ -394,30 +398,40 @@ sequenceDiagram
 flowchart TD
     A["Admin buka /admin/login"]:::step
     B["GET /admin/login"]:::step
-    C["AuthController@showLogin"]:::step
+    C["AuthController showLogin"]:::step
     D["Render form + CSRF token"]:::step
     E["Admin submit form"]:::step
     F["POST /admin/login"]:::step
-    G{"CsrfMiddleware<br/>checkOrFail?"}:::check
+    G{"CsrfMiddleware checkOrFail"}:::check
     H["419 CSRF Invalid"]:::fail
     I["Sanitizer + Validator"]:::step
-    J{"RateLimit::hit()?"}:::check
+    J{"RateLimit hit"}:::check
     K["Tolak: Terlalu banyak percobaan"]:::fail
-    L["Auth::attempt()"]:::step
-    M{"password_verify()?"}:::check
+    L["Auth attempt"]:::step
+    M{"password verify"}:::check
     N["Log attempt + Redirect"]:::fail
-    O["session_regenerate_id()"]:::step
-    P["Set $_SESSION[user]"]:::step
-    Q["Csrf::rotate()"]:::step
+    O["session_regenerate_id"]:::step
+    P["Set SESSION user"]:::step
+    Q["Csrf rotate"]:::step
     R["Redirect /admin/dashboard"]:::success
 
-    A --> B --> C --> D --> E --> F --> G
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
     G -->|Gagal| H
-    G -->|Sukses| I --> J
+    G -->|Sukses| I
+    I --> J
     J -->|Melebihi| K
-    J -->|OK| L --> M
+    J -->|OK| L
+    L --> M
     M -->|Gagal| N
-    M -->|Sukses| O --> P --> Q --> R
+    M -->|Sukses| O
+    O --> P
+    P --> Q
+    Q --> R
 
     classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
     classDef check fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17,font-weight:bold
@@ -443,54 +457,60 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph L1["Lapis 1: Struktur"]
-        A1["public/ = document root"]:::layer1
-        A2[".htaccess blokir folder"]:::layer1
+    subgraph L1["Lapis 1 - Struktur"]
+        A1["public = document root"]:::layer1
+        A2["htaccess blokir folder"]:::layer1
         A3["File inti di luar web"]:::layer1
     end
 
-    subgraph L2["Lapis 2: Input"]
-        B1["Sanitizer::string()"]:::layer2
-        B2["Validator::required()"]:::layer2
+    subgraph L2["Lapis 2 - Input"]
+        B1["Sanitizer string"]:::layer2
+        B2["Validator required"]:::layer2
         B3["Whitelist ekstensi"]:::layer2
     end
 
-    subgraph L3["Lapis 3: Query"]
+    subgraph L3["Lapis 3 - Query"]
         C1["PDO Prepared Statement"]:::layer3
-        C2["EMULATE_PREPARES=false"]:::layer3
+        C2["EMULATE_PREPARES false"]:::layer3
         C3["QueryBuilder validasi kolom"]:::layer3
     end
 
-    subgraph L4["Lapis 4: Output"]
-        D1["Xss::e() escape"]:::layer4
-        D2["htmlspecialchars()"]:::layer4
+    subgraph L4["Lapis 4 - Output"]
+        D1["Xss e escape"]:::layer4
+        D2["htmlspecialchars"]:::layer4
     end
 
-    subgraph L5["Lapis 5: Session"]
-        E1["session_regenerate_id()"]:::layer5
+    subgraph L5["Lapis 5 - Session"]
+        E1["session_regenerate_id"]:::layer5
         E2["HttpOnly + Secure + SameSite"]:::layer5
         E3["Timeout 30 menit"]:::layer5
     end
 
-    subgraph L6["Lapis 6: CSRF"]
+    subgraph L6["Lapis 6 - CSRF"]
         F1["Token per session"]:::layer6
-        F2["hash_equals()"]:::layer6
+        F2["hash_equals"]:::layer6
         F3["Rotate setelah login"]:::layer6
     end
 
-    subgraph L7["Lapis 7: Rate Limit"]
+    subgraph L7["Lapis 7 - Rate Limit"]
         G1["Login max 5x"]:::layer7
-        G2["Request max 60/menit"]:::layer7
+        G2["Request max 60 per menit"]:::layer7
         G3["Lockout 15 menit"]:::layer7
     end
 
-    subgraph L8["Lapis 8: Headers"]
+    subgraph L8["Lapis 8 - Headers"]
         H1["CSP"]:::layer8
         H2["X-Frame-Options"]:::layer8
         H3["HSTS"]:::layer8
     end
 
-    L1 --> L2 --> L3 --> L4 --> L5 --> L6 --> L7 --> L8
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    L4 --> L5
+    L5 --> L6
+    L6 --> L7
+    L7 --> L8
 
     classDef layer1 fill:#e1f5fe,stroke:#01579b,stroke-width:1.5px,color:#01579b
     classDef layer2 fill:#b3e5fc,stroke:#0277bd,stroke-width:1.5px,color:#01579b
@@ -516,15 +536,15 @@ flowchart LR
 | Ancaman | Mitigasi | File |
 |---|---|---|
 | SQL Injection | PDO prepared statement | Connection.php, QueryBuilder.php |
-| XSS | Xss::e() untuk semua output | Security/Xss.php |
+| XSS | Xss e untuk semua output | Security/Xss.php |
 | CSRF | Token per session | Security/Csrf.php |
 | Session Hijacking | session_regenerate_id + cookie hardening | bootstrap.php |
 | Brute Force | Rate limit + lockout | Security/RateLimit.php |
 | File Upload | Validasi MIME + ekstensi + rename | Security/UploadGuard.php |
-| Clickjacking | X-Frame-Options: DENY | Security/Headers.php |
-| MIME Sniffing | X-Content-Type-Options: nosniff | Security/Headers.php |
-| Info Leak | display_errors = 0 | bootstrap.php |
-| Direct Access | Struktur folder + .htaccess | Root .htaccess |
+| Clickjacking | X-Frame-Options DENY | Security/Headers.php |
+| MIME Sniffing | X-Content-Type-Options nosniff | Security/Headers.php |
+| Info Leak | display_errors 0 | bootstrap.php |
+| Direct Access | Struktur folder + htaccess | Root htaccess |
 | Supply Chain | Tanpa Composer / dependency | — |
 
 ---
@@ -539,20 +559,36 @@ flowchart TD
     D["Form Tambah Produk"]:::step
     E["POST /admin/products"]:::step
     F["AuthMiddleware"]:::check
-    G["RoleMiddleware: product.edit"]:::check
+    G["RoleMiddleware product.edit"]:::check
     H["CsrfMiddleware"]:::check
-    I["ValidatedData()"]:::step
-    J["UploadService::store()"]:::step
-    K["UploadGuard: MIME + ext + size"]:::check
-    L["Simpan ke uploads/products/"]:::step
-    M["QueryBuilder::insert()"]:::step
-    N[("MySQL: products")]:::data
-    O["QueryBuilder::insert()"]:::step
-    P[("MySQL: product_images")]:::data
+    I["ValidatedData"]:::step
+    J["UploadService store"]:::step
+    K["UploadGuard MIME + ext + size"]:::check
+    L["Simpan ke uploads/products"]:::step
+    M["QueryBuilder insert"]:::step
+    N[("MySQL products")]:::data
+    O["QueryBuilder insert"]:::step
+    P[("MySQL product_images")]:::data
     Q["Log activity"]:::step
     R["Redirect + Flash success"]:::success
 
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K --> L --> M --> N --> O --> P --> Q --> R
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    L --> M
+    M --> N
+    N --> O
+    O --> P
+    P --> Q
+    Q --> R
 
     classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
     classDef check fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17,font-weight:bold
@@ -584,17 +620,26 @@ flowchart LR
     D["Filter / Cari Produk"]:::step
     E["Detail Produk"]:::step
     F["Klik CTA WhatsApp"]:::step
-    G["WhatsAppService::link()"]:::step
+    G["WhatsAppService link"]:::step
     H["Generate URL wa.me"]:::step
     I["Buka WhatsApp"]:::step
     J["Pesan otomatis<br/>Halo TBL, saya ingin<br/>konsultasi produk X"]:::success
-    K["WhatsAppService::track()"]:::step
-    L[("MySQL: whatsapp_clicks")]:::data
+    K["WhatsAppService track"]:::step
+    L[("MySQL whatsapp_clicks")]:::data
     M["Analytics Dashboard"]:::success
 
-    A --> B --> C --> D --> E --> F
-    F --> G --> H --> I --> J
-    F --> K --> L --> M
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    F --> K
+    K --> L
+    L --> M
 
     classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
     classDef data fill:#f3e5f5,stroke:#6a1b9a,stroke-width:1.5px,color:#4a148c
@@ -645,7 +690,7 @@ mindmap
       Detail Produk
         Galeri Foto
         Spesifikasi
-        Harga + Promo
+        Harga dan Promo
         Stok
         CTA WhatsApp
         Produk Terkait
@@ -679,7 +724,6 @@ erDiagram
     USERS ||--o{ ACTIVITY_LOGS : "melakukan"
     USERS ||--o{ SESSIONS : "memiliki"
     USERS ||--o{ LOGIN_ATTEMPTS : "mencatat"
-
     CATEGORIES ||--o{ PRODUCTS : "memiliki"
     PRODUCTS ||--o{ PRODUCT_IMAGES : "memiliki"
     PRODUCTS ||--o{ PRODUCT_PROMOS : "terhubung"
@@ -818,13 +862,13 @@ flowchart TD
     A["Request masuk"]:::step
     B["public/index.php"]:::step
     C["bootstrap.php"]:::step
-    D{"Method?"}:::check
+    D{"Method"}:::check
     E["routes/web.php"]:::step
     F["routes/admin.php"]:::step
-    G["Router::dispatch()"]:::step
-    H{"Exact match?"}:::check
+    G["Router dispatch"]:::step
+    H{"Exact match"}:::check
     I["Call handler"]:::step
-    J{"Dynamic /{slug}?"}:::check
+    J{"Dynamic slug"}:::check
     K["Extract params"]:::step
     L["404"]:::fail
     M["Middleware"]:::step
@@ -833,17 +877,24 @@ flowchart TD
     P["View"]:::step
     Q["Response"]:::success
 
-    A --> B --> C --> D
+    A --> B
+    B --> C
+    C --> D
     D -->|GET| E
-    D -->|GET/POST| F
+    D -->|GET atau POST| F
     E --> G
     F --> G
     G --> H
     H -->|Ya| I
     H -->|Tidak| J
-    J -->|Ya| K --> I
+    J -->|Ya| K
+    K --> I
     J -->|Tidak| L
-    I --> M --> N --> O --> P --> Q
+    I --> M
+    M --> N
+    N --> O
+    O --> P
+    P --> Q
 
     classDef step fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
     classDef check fill:#fff9c4,stroke:#f9a825,stroke-width:1.5px,color:#f57f17,font-weight:bold
@@ -855,29 +906,29 @@ flowchart TD
 
 | Method | URL | Handler |
 |---|---|---|
-| GET | / | HomeController@index |
-| GET | /produk | ProductController@index |
-| GET | /produk/{slug} | ProductController@show |
-| GET | /kategori/{slug} | ProductController@byCategory |
-| GET | /promo | ProductController@promos |
-| GET | /profil | HomeController@profile |
-| GET | /lokasi | HomeController@store |
-| GET | /informasi/{slug} | InfoController@show |
+| GET | / | HomeController index |
+| GET | /produk | ProductController index |
+| GET | /produk/{slug} | ProductController show |
+| GET | /kategori/{slug} | ProductController byCategory |
+| GET | /promo | ProductController promos |
+| GET | /profil | HomeController profile |
+| GET | /lokasi | HomeController store |
+| GET | /informasi/{slug} | InfoController show |
 
 ### Route Admin
 
 | Method | URL | Handler |
 |---|---|---|
-| GET | /admin/login | AuthController@showLogin |
-| POST | /admin/login | AuthController@login |
-| POST | /admin/logout | AuthController@logout |
-| GET | /admin/dashboard | DashboardController@index |
-| GET | /admin/products | ProductController@index |
-| GET | /admin/products/create | ProductController@create |
-| POST | /admin/products | ProductController@store |
-| GET | /admin/products/edit/{id} | ProductController@edit |
-| POST | /admin/products/update/{id} | ProductController@update |
-| POST | /admin/products/delete/{id} | ProductController@destroy |
+| GET | /admin/login | AuthController showLogin |
+| POST | /admin/login | AuthController login |
+| POST | /admin/logout | AuthController logout |
+| GET | /admin/dashboard | DashboardController index |
+| GET | /admin/products | ProductController index |
+| GET | /admin/products/create | ProductController create |
+| POST | /admin/products | ProductController store |
+| GET | /admin/products/edit/{id} | ProductController edit |
+| POST | /admin/products/update/{id} | ProductController update |
+| POST | /admin/products/delete/{id} | ProductController destroy |
 
 ---
 
@@ -893,7 +944,7 @@ flowchart LR
         A5["Dashboard admin"]:::mvp
         A6["CRUD produk"]:::mvp
         A7["Manajemen promo"]:::mvp
-        A8["Profil & lokasi toko"]:::mvp
+        A8["Profil dan lokasi toko"]:::mvp
         A9["Responsive mobile"]:::mvp
         A10["SEO dasar"]:::mvp
     end
@@ -908,7 +959,7 @@ flowchart LR
         B7["Analytics lanjutan"]:::next
     end
 
-    MVP --> FASE2
+    A10 --> B1
 
     classDef mvp fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
     classDef next fill:#bbdefb,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
@@ -924,13 +975,13 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph SERVER["Server Requirements"]
-        A["CPU: 1 core"]:::server
-        B["RAM: 512 MB"]:::server
-        C["Storage: 5 GB"]:::server
+        A["CPU 1 core"]:::server
+        B["RAM 512 MB"]:::server
+        C["Storage 5 GB"]:::server
         D["PHP 8.2+"]:::server
         E["MySQL 8+ / MariaDB 10.5+"]:::server
         F["Apache 2.4 + mod_rewrite"]:::server
-        G["SSL/HTTPS"]:::server
+        G["SSL HTTPS"]:::server
     end
 
     classDef server fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
@@ -976,7 +1027,7 @@ flowchart TB
 | routes/ | Definisi route | Diblokir |
 | storage/ | Log, cache, backup | Diblokir |
 | tests/ | Unit & feature test | Diblokir |
-| vendor/ | (Tidak dipakai) | Diblokir |
+| vendor/ | Tidak dipakai | Diblokir |
 
 ---
 
@@ -1024,27 +1075,27 @@ gantt
 
     section Perencanaan
     Analisis kebutuhan         :a1, 2026-10-01, 5d
-    Desain UI/UX              :a2, after a1, 10d
+    Desain UI UX               :a2, after a1, 10d
 
     section Setup
-    Setup server & database   :b1, after a2, 2d
-    Struktur folder & config  :b2, after b1, 2d
+    Setup server dan database  :b1, after a2, 2d
+    Struktur folder dan config :b2, after b1, 2d
 
     section Development
-    Core (Router, DB, Auth)   :c1, after b2, 7d
-    Security layer            :c2, after c1, 5d
-    Frontend publik           :c3, after c2, 10d
-    Admin dashboard           :c4, after c3, 10d
-    Integrasi WhatsApp        :c5, after c4, 2d
+    Core Router DB Auth        :c1, after b2, 7d
+    Security layer             :c2, after c1, 5d
+    Frontend publik            :c3, after c2, 10d
+    Admin dashboard            :c4, after c3, 10d
+    Integrasi WhatsApp         :c5, after c4, 2d
 
     section Testing
-    Unit & feature test       :d1, after c5, 5d
-    UAT bersama TBL           :d2, after d1, 5d
-    Perbaikan bug             :d3, after d2, 5d
+    Unit dan feature test      :d1, after c5, 5d
+    UAT bersama TBL            :d2, after d1, 5d
+    Perbaikan bug              :d3, after d2, 5d
 
     section Go Live
-    Deployment produksi       :e1, after d3, 2d
-    Training admin TBL        :e2, after e1, 3d
+    Deployment produksi        :e1, after d3, 2d
+    Training admin TBL         :e2, after e1, 3d
 ```
 
 ### Rincian Waktu
@@ -1071,11 +1122,10 @@ gantt
 ```mermaid
 flowchart TB
     A["Total Anggaran"]:::root
-
     B["Pengembangan<br/>Rp 24.000.000"]:::dev
-    C["Infrastruktur<br/>Rp 1.050.000/tahun"]:::infra
-    D["Operasional<br/>Rp 1.500.000/bulan"]:::ops
-    E["Fase 2<br/>Rp 20.000.000+"]:::fase
+    C["Infrastruktur<br/>Rp 2.750.000 per tahun"]:::infra
+    D["Operasional<br/>Rp 1.400.000 per bulan"]:::ops
+    E["Fase 2<br/>Rp 43.000.000 plus"]:::fase
 
     A --> B
     A --> C
@@ -1150,7 +1200,7 @@ flowchart TB
 | 2 | VPS 2 GB RAM | Rp 1.800.000 |
 | 3 | SSL Let's Encrypt | Rp 0 |
 | 4 | Backup storage | Rp 500.000 |
-| 5 | Monitoring (UptimeRobot) | Rp 300.000 |
+| 5 | Monitoring UptimeRobot | Rp 300.000 |
 | **TOTAL** | | **Rp 2.750.000/tahun** |
 
 #### Opsi Cloud (Enterprise)
@@ -1158,9 +1208,9 @@ flowchart TB
 | No | Item | Biaya/Tahun |
 |---|---|---|
 | 1 | Domain .com | Rp 150.000 |
-| 2 | Cloud VPS (AWS/GCP/DO) | Rp 4.800.000 |
+| 2 | Cloud VPS AWS GCP DO | Rp 4.800.000 |
 | 3 | SSL Premium | Rp 1.200.000 |
-| 4 | CDN (Cloudflare Pro) | Rp 3.000.000 |
+| 4 | CDN Cloudflare Pro | Rp 3.000.000 |
 | 5 | Backup & monitoring | Rp 1.500.000 |
 | **TOTAL** | | **Rp 10.650.000/tahun** |
 
@@ -1173,10 +1223,10 @@ flowchart TB
 | No | Item | Biaya/Bulan |
 |---|---|---|
 | 1 | Maintenance & update | Rp 500.000 – Rp 1.000.000 |
-| 2 | Update konten (produk/promo) | Rp 300.000 |
+| 2 | Update konten produk/promo | Rp 300.000 |
 | 3 | Security monitoring | Rp 300.000 |
 | 4 | Backup verification | Rp 200.000 |
-| 5 | Domain & hosting (amortisasi) | Rp 100.000 – Rp 250.000 |
+| 5 | Domain & hosting amortisasi | Rp 100.000 – Rp 250.000 |
 | **TOTAL** | | **Rp 1.400.000 – Rp 2.050.000/bulan** |
 
 ---
@@ -1185,11 +1235,11 @@ flowchart TB
 
 | No | Fitur | Estimasi |
 |---|---|---|
-| 1 | Payment Gateway (Midtrans/Xendit) | Rp 5.000.000 – Rp 10.000.000 |
+| 1 | Payment Gateway Midtrans/Xendit | Rp 5.000.000 – Rp 10.000.000 |
 | 2 | CRM Integration | Rp 8.000.000 – Rp 15.000.000 |
 | 3 | Logistik Integration | Rp 5.000.000 – Rp 10.000.000 |
 | 4 | Multi Bahasa | Rp 3.000.000 – Rp 5.000.000 |
-| 5 | Mobile App (Android + iOS) | Rp 20.000.000 – Rp 40.000.000 |
+| 5 | Mobile App Android + iOS | Rp 20.000.000 – Rp 40.000.000 |
 | 6 | Analytics Lanjutan | Rp 2.000.000 – Rp 5.000.000 |
 | **TOTAL** | | **Rp 43.000.000 – Rp 85.000.000** |
 
@@ -1199,12 +1249,13 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A["Tahun 1<br/>Rp 43.850.000"]:::y1
-    B["Tahun 2<br/>Rp 19.850.000"]:::y2
-    C["Tahun 3<br/>Rp 19.850.000"]:::y3
-    D["Fase 2<br/>Rp 43.000.000+"]:::fase
+    A["Tahun 1<br/>Rp 43.550.000"]:::y1
+    B["Tahun 2<br/>Rp 19.550.000"]:::y2
+    C["Tahun 3<br/>Rp 19.550.000"]:::y3
+    D["Fase 2<br/>Rp 43.000.000 plus"]:::fase
 
-    A --> B --> C
+    A --> B
+    B --> C
     A -.-> D
 
     classDef y1 fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d47a1
@@ -1217,7 +1268,7 @@ flowchart LR
 
 | Komponen | Biaya |
 |---|---|
-| Pengembangan (Opsi A) | Rp 24.000.000 |
+| Pengembangan Opsi A | Rp 24.000.000 |
 | Infrastruktur VPS | Rp 2.750.000 |
 | Operasional 12 bulan | Rp 16.800.000 |
 | **Subtotal Tahun 1** | **Rp 43.550.000** |
@@ -1245,10 +1296,10 @@ flowchart LR
 
 | Prioritas | Alokasi | Keterangan |
 |---|---|---|
-| **Wajib** | Pengembangan MVP | Rp 24.000.000 |
-| **Wajib** | Infrastruktur VPS 1 tahun | Rp 2.750.000 |
-| **Wajib** | Operasional 1 tahun | Rp 16.800.000 |
-| **Cadangan** | Bug & revisi | Rp 3.000.000 |
+| Wajib | Pengembangan MVP | Rp 24.000.000 |
+| Wajib | Infrastruktur VPS 1 tahun | Rp 2.750.000 |
+| Wajib | Operasional 1 tahun | Rp 16.800.000 |
+| Cadangan | Bug & revisi | Rp 3.000.000 |
 | **Total Awal** | | **Rp 46.550.000** |
 
 **Skema Pembayaran yang Disarankan:**
@@ -1293,24 +1344,28 @@ Asumsi:
 ```mermaid
 flowchart TB
     A["Website TBL"]:::root
-
     B["Frontend Publik"]:::pub
     C["Backend Admin"]:::adm
     D["Keamanan Berlapis"]:::sec
     E["Database MySQL"]:::data
     F["Anggaran"]:::ang
 
-    B1["Homepage → Katalog → Detail → WhatsApp"]:::pub
+    B1["Homepage - Katalog - Detail - WhatsApp"]:::pub
     C1["Kelola Produk, Promo, Konten, Toko"]:::adm
-    D1["8 Lapis: Struktur, Input, Query,<br/>Output, Session, CSRF, Rate Limit, Headers"]:::sec
+    D1["8 Lapis: Struktur, Input, Query, Output, Session, CSRF, Rate Limit, Headers"]:::sec
     E1["15 Tabel Relasional"]:::data
-    F1["Rp 46.550.000<br/>BEP ± 9 bulan"]:::ang
+    F1["Rp 46.550.000 - BEP 9 bulan"]:::ang
 
-    A --> B --> B1
-    A --> C --> C1
-    A --> D --> D1
-    A --> E --> E1
-    A --> F --> F1
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    B --> B1
+    C --> C1
+    D --> D1
+    E --> E1
+    F --> F1
 
     classDef root fill:#1565c0,stroke:#0d47a1,stroke-width:2px,color:#ffffff,font-weight:bold
     classDef pub fill:#c8e6c9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
@@ -1337,12 +1392,12 @@ flowchart TB
 
 ### Inti Website
 
-- Publik: Homepage → Katalog → Detail Produk → WhatsApp
-- Admin: Login → Dashboard → CRUD Produk/Promo/Konten
+- Publik: Homepage - Katalog - Detail Produk - WhatsApp
+- Admin: Login - Dashboard - CRUD Produk/Promo/Konten
 - Keamanan: 8 lapis pertahanan tanpa dependency eksternal
 - Database: 15 tabel MySQL relasional
 - Anggaran: Rp 46.550.000 (investasi awal) dengan BEP ± 9 bulan
 
 ---
 
-© 2026 TBL Sofa & Furniture Dokumentasi Teknis
+© 2026 TBL Sofa & Furniture  Dokumentasi Teknis
